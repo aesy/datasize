@@ -8,14 +8,23 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.ParseException;
 
+/**
+ * For more thorough testing of parsing, see the test cases for the classes dedicated to parsing.
+ */
 public class BytesTest implements WithAssertions {
     @Test
     @DisplayName("it should throw NullPointerException if passed null values")
     public void test_npe() {
+        assertThatThrownBy(() -> Bytes.valueOf((BigInteger) null, ByteUnit.BYTE))
+            .isInstanceOf(NullPointerException.class);
+
         assertThatThrownBy(() -> Bytes.valueOf((BigDecimal) null, ByteUnit.BYTE))
             .isInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> Bytes.valueOf(BigDecimal.ONE, null))
+            .isInstanceOf(NullPointerException.class);
+
+        assertThatThrownBy(() -> Bytes.valueOf((BigInteger) null, null))
             .isInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> Bytes.valueOf((BigDecimal) null, null))
