@@ -1,7 +1,7 @@
 package org.aesy.bytes;
 
 import org.aesy.bytes.format.BytesFormatter;
-import org.aesy.bytes.format.SmartBytesFormatter;
+import org.aesy.bytes.format.SimpleBytesFormatter;
 import org.aesy.bytes.parse.BytesParser;
 import org.aesy.bytes.parse.SmartBytesParser;
 
@@ -45,6 +45,7 @@ public class Bytes implements Comparable<Bytes> {
     public static Bytes parse(String input) throws ParseException {
         Objects.requireNonNull(input);
 
+        // Create new instance every time in case default locale has changed
         BytesParser parser = new SmartBytesParser();
 
         return parser.parse(input);
@@ -83,8 +84,9 @@ public class Bytes implements Comparable<Bytes> {
 
     @Override
     public String toString() {
-        BytesFormatter formatter = new SmartBytesFormatter(2);
+        // Create new instance every time in case default locale has changed
+        BytesFormatter formatter = new SimpleBytesFormatter(2);
 
-        return formatter.toShortString(this);
+        return formatter.format(this);
     }
 }
