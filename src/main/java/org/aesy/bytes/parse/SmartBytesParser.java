@@ -121,8 +121,4 @@ public class SmartBytesParser implements BytesParser {
         System.out.println(String.format("%s Error at index %d '(...)%s'", input, i, input.substring(i)));
         throw new ParseException(input, i);
     }
-
-    public static void main(String[] args) {
-
-    }
 }

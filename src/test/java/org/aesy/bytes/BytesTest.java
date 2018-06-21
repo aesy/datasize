@@ -109,7 +109,6 @@ public class BytesTest implements WithAssertions {
         Bytes bytes = Bytes.valueOf(value, unit);
 
         assertThat(bytes.toString())
-            .isNotNull()
             .isNotBlank()
             .isEqualTo(String.format("%.2f %s", value, unit));
     }

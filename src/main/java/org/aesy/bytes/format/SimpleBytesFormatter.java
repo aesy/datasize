@@ -12,8 +12,8 @@ import java.util.Objects;
 public class SimpleBytesFormatter implements BytesFormatter {
     private static final int DEFAULT_PRECISION = 2;
 
-    private Locale locale;
-    private int precision;
+    private final Locale locale;
+    private final int precision;
 
     public SimpleBytesFormatter() {
         this(Locale.getDefault(Locale.Category.FORMAT), DEFAULT_PRECISION);
