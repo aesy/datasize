@@ -1,25 +1,21 @@
 package org.aesy.bytes.convert;
 
 import org.aesy.bytes.ByteUnit;
+import org.aesy.bytes.ByteUnits;
 import org.aesy.bytes.Bytes;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-public class NaturalBytesConverter implements BytesConverter {
-    private static final List<ByteUnit> SI = Arrays.asList(ByteUnit.SI.values());
-    private static final List<ByteUnit> IEC = Arrays.asList(ByteUnit.IEC.values());
-    private static final List<ByteUnit> JEDEC = Arrays.asList(ByteUnit.JEDEC.values());
+public class SmartNaturalBytesConverter implements BytesConverter {
     private static final BigDecimal ONE_THOUSAND = BigDecimal.valueOf(1000);
 
     @Override
     public Bytes convert(Bytes bytes) {
         BigDecimal originalValue = bytes.getValue();
         ByteUnit originalUnit = bytes.getUnit();
-        boolean isLessThanOneThousandBytes = ByteUnit.BYTE.convert(bytes)
-                                                          .getValue().compareTo(ONE_THOUSAND) < 0;
+        boolean isLessThanOneThousandBytes = ByteUnits.COMMON.BYTE.convert(bytes)
+                                                                  .getValue().compareTo(ONE_THOUSAND) < 0;
 
         if (isLessThanOneThousandBytes) {
             // Values less than 1000 bytes are best viewed as bytes
@@ -28,17 +24,17 @@ public class NaturalBytesConverter implements BytesConverter {
 
         ArrayList<ByteUnit> units = new ArrayList<>();
 
-        if (SI.contains(originalUnit)) {
+        if (ByteUnits.SI.has(originalUnit)) {
             // Prefer SI units
-            units.addAll(SI);
-            units.addAll(IEC);
-        } else if (IEC.contains(originalUnit)) {
+            units.addAll(ByteUnits.SI.units());
+            units.addAll(ByteUnits.IEC.units());
+        } else if (ByteUnits.IEC.has(originalUnit)) {
             // Prefer IEC units
-            units.addAll(IEC);
-            units.addAll(SI);
-        } else if (JEDEC.contains(originalUnit)) {
+            units.addAll(ByteUnits.IEC.units());
+            units.addAll(ByteUnits.SI.units());
+        } else if (ByteUnits.JEDEC.has(originalUnit)) {
             // Only use JEDEC units if the original does
-            units.addAll(JEDEC);
+            units.addAll(ByteUnits.JEDEC.units());
         } else {
             // Unknown unit type, use original
             return bytes;

@@ -164,7 +164,7 @@ public class Bytes implements Comparable<Bytes> {
         Objects.requireNonNull(input);
 
         // Create new instance every time in case default locale has changed
-        BytesParser parser = new SmartBytesParser();
+        BytesParser parser = new LenientBytesParser();
 
         return parser.parse(input);
     }
