@@ -15,10 +15,10 @@ public class BytesTest implements WithAssertions {
     @Test
     @DisplayName("it should throw NullPointerException if passed null values")
     public void test_npe() {
-        assertThatThrownBy(() -> Bytes.valueOf((BigInteger) null, ByteUnit.BYTE))
+        assertThatThrownBy(() -> Bytes.valueOf((BigInteger) null, ByteUnits.COMMON.BYTE))
             .isInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> Bytes.valueOf((BigDecimal) null, ByteUnit.BYTE))
+        assertThatThrownBy(() -> Bytes.valueOf((BigDecimal) null, ByteUnits.COMMON.BYTE))
             .isInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> Bytes.valueOf(BigDecimal.ONE, null))
@@ -30,7 +30,7 @@ public class BytesTest implements WithAssertions {
         assertThatThrownBy(() -> Bytes.valueOf((BigDecimal) null, null))
             .isInstanceOf(NullPointerException.class);
 
-        assertThatThrownBy(() -> Bytes.valueOf(0, ByteUnit.BYTE).compareTo(null))
+        assertThatThrownBy(() -> Bytes.valueOf(0, ByteUnits.COMMON.BYTE).compareTo(null))
             .isInstanceOf(NullPointerException.class);
 
         assertThatThrownBy(() -> Bytes.parse(null))
@@ -40,7 +40,7 @@ public class BytesTest implements WithAssertions {
     @Test
     @DisplayName("it should throw IllegalArgumentException if passed value less than zero")
     public void test_lessThanZero() {
-        assertThatThrownBy(() -> Bytes.valueOf(BigInteger.valueOf(-1), ByteUnit.BYTE))
+        assertThatThrownBy(() -> Bytes.valueOf(BigInteger.valueOf(-1), ByteUnits.COMMON.BYTE))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -48,7 +48,7 @@ public class BytesTest implements WithAssertions {
     @DisplayName("it should hold a value and a unit")
     public void test_value_unit() {
         BigDecimal value = BigDecimal.ZERO;
-        ByteUnit unit = ByteUnit.BYTE;
+        ByteUnit unit = ByteUnits.COMMON.BYTE;
         Bytes bytes = Bytes.valueOf(value, unit);
 
         assertThat(bytes.getValue())
@@ -63,7 +63,7 @@ public class BytesTest implements WithAssertions {
     @Test
     @DisplayName("it should be able to parse its own string representation")
     public void test_parse_toString() throws ParseException {
-        Bytes bytes = Bytes.valueOf(1.23, ByteUnit.BYTE);
+        Bytes bytes = Bytes.valueOf(1.23, ByteUnits.COMMON.BYTE);
 
         assertThat(Bytes.parse(bytes.toString()))
             .isEqualTo(bytes);
@@ -72,11 +72,11 @@ public class BytesTest implements WithAssertions {
     @Test
     @DisplayName("it should be comparable similarly to numbers and be equal if and only if their values as byte are equal")
     public void test_compareTo() {
-        Bytes nothing = Bytes.valueOf(0, ByteUnit.BYTE);
-        Bytes bytes = Bytes.valueOf(2048, ByteUnit.BYTE);
-        Bytes kilobytes = Bytes.valueOf(2048, ByteUnit.JEDEC.KILOBYTE);
-        Bytes megabytes = Bytes.valueOf(2, ByteUnit.JEDEC.MEGABYTE);
-        Bytes gigabytes = Bytes.valueOf(1, ByteUnit.JEDEC.GIGABYTE);
+        Bytes nothing = Bytes.valueOf(0, ByteUnits.COMMON.BYTE);
+        Bytes bytes = Bytes.valueOf(2048, ByteUnits.COMMON.BYTE);
+        Bytes kilobytes = Bytes.valueOf(2048, ByteUnits.JEDEC.KILOBYTE);
+        Bytes megabytes = Bytes.valueOf(2, ByteUnits.JEDEC.MEGABYTE);
+        Bytes gigabytes = Bytes.valueOf(1, ByteUnits.JEDEC.GIGABYTE);
 
         assertThat(kilobytes)
             .isEqualByComparingTo(megabytes)
@@ -88,10 +88,10 @@ public class BytesTest implements WithAssertions {
     @Test
     @DisplayName("it should be equal to another instance if and only if their values as byte are equal")
     public void test_equals() {
-        Bytes nothing = Bytes.valueOf(0, ByteUnit.BYTE);
-        Bytes bytes = Bytes.valueOf(2048, ByteUnit.BYTE);
-        Bytes kilobytes = Bytes.valueOf(2048, ByteUnit.JEDEC.KILOBYTE);
-        Bytes megabytes = Bytes.valueOf(2, ByteUnit.JEDEC.MEGABYTE);
+        Bytes nothing = Bytes.valueOf(0, ByteUnits.COMMON.BYTE);
+        Bytes bytes = Bytes.valueOf(2048, ByteUnits.COMMON.BYTE);
+        Bytes kilobytes = Bytes.valueOf(2048, ByteUnits.JEDEC.KILOBYTE);
+        Bytes megabytes = Bytes.valueOf(2, ByteUnits.JEDEC.MEGABYTE);
 
         assertThat(kilobytes)
             .isNotEqualTo(null)
@@ -105,7 +105,7 @@ public class BytesTest implements WithAssertions {
     @DisplayName("it should have a string representation which is nicely formatted")
     public void test_toString() {
         double value = 15.389203948;
-        ByteUnit unit = ByteUnit.SI.KILOBYTE;
+        ByteUnit unit = ByteUnits.SI.KILOBYTE;
         Bytes bytes = Bytes.valueOf(value, unit);
 
         assertThat(bytes.toString())
