@@ -4,9 +4,56 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.aesy</groupId>
+    <groupId>io.aesy</groupId>
     <artifactId>bytes</artifactId>
-    <version>1.0.0</version>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>Bytes</name>
+    <description>A utility library for working with information units</description>
+    <inceptionYear>2018</inceptionYear>
+    <url>https://github.com/aesy/bytes</url>
+
+    <issueManagement>
+        <url>https://github.com/aesy/bytes/issues</url>
+        <system>GitHub Issues</system>
+    </issueManagement>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/mit-license.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/aesy/bytes</url>
+        <connection>scm:git:git://github.com/aesy/bytes.git</connection>
+        <developerConnection>scm:git:git@github.com:aesy/bytes.git</developerConnection>
+        <tag>master</tag>
+    </scm>
+
+    <developers>
+        <developer>
+            <id>aesy</id>
+            <name>Isak Wertwein</name>
+            <email>isak.wertwein@gmail.com</email>
+            <url>https://github.com/aesy</url>
+        </developer>
+    </developers>
+
+    <contributors>
+        <contributor>
+            <url>https://github.com/aesy/bytes/graphs/contributors</url>
+        </contributor>
+    </contributors>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+    </properties>
 
     <repositories>
         <repository>
@@ -26,7 +73,7 @@
                 </configuration>
             </plugin>
         </plugins>
-    </build>
+    </reporting>
 
     <dependencies>
         <dependency>
@@ -69,4 +116,122 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.0.0</version>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>io.aesy.checkstyle</groupId>
+                        <artifactId>checkstyle-config-aesy</artifactId>
+                        <version>1.0.0</version>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>8.10.1</version>
+                    </dependency>
+                </dependencies>
+
+                <configuration>
+                    <configLocation>aesy_checks.xml</configLocation>
+                    <failsOnError>true</failsOnError>
+                    <failOnViolation>false</failOnViolation>
+                    <logViolationsToConsole>true</logViolationsToConsole>
+                    <violationSeverity>warning</violationSeverity>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>se.eris</groupId>
+                <artifactId>notnull-instrumenter-maven-plugin</artifactId>
+                <version>0.6.8</version>
+
+                <configuration>
+                    <implicit>true</implicit>
+                    <nullable>
+                        <param>javax.annotation.Nullable</param>
+                    </nullable>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>instrument</goal>
+                            <goal>tests-instrument</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.0</version>
+
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
