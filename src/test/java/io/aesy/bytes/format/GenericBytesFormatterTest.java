@@ -1,11 +1,12 @@
-package org.aesy.bytes.format;
+package io.aesy.bytes.format;
 
-import org.aesy.bytes.ByteUnits;
-import org.aesy.bytes.Bytes;
-import org.aesy.bytes.factory.BytesFormatterFactory;
-import org.aesy.bytes.provider.BytesFormatterFactoryProvider;
+import io.aesy.bytes.ByteUnits;
+import io.aesy.bytes.Bytes;
+import io.aesy.bytes.factory.BytesFormatterFactory;
+import io.aesy.bytes.provider.BytesFormatterFactoryProvider;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
@@ -17,19 +18,19 @@ import java.util.Locale;
 /**
  * Tests all identical properties of all {@code BytesFormatter} implementations.
  */
-public class BytesFormatterTest implements WithAssertions {
+public class GenericBytesFormatterTest implements WithAssertions {
     @ParameterizedTest
     @ArgumentsSource(BytesFormatterFactoryProvider.class)
-    @DisplayName("it should throw NullPointerException if passed null values")
+    @DisplayName("it should throw IllegalArgumentException if passed null values")
     public void test_npe(BytesFormatterFactory formatterFactory) {
         assertThatThrownBy(() -> formatterFactory.create(null))
-            .isInstanceOf(NullPointerException.class);
+            .isInstanceOf(IllegalArgumentException.class);
 
         assertThatThrownBy(() -> formatterFactory.create(null, 0))
-            .isInstanceOf(NullPointerException.class);
+            .isInstanceOf(IllegalArgumentException.class);
 
         assertThatThrownBy(() -> formatterFactory.create().format(null))
-            .isInstanceOf(NullPointerException.class);
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @ParameterizedTest
@@ -48,9 +49,9 @@ public class BytesFormatterTest implements WithAssertions {
     @DisplayName("it should produce a non-empty string")
     public void test_return(BytesFormatterFactory formatterFactory) {
         BytesFormatter formatter = formatterFactory.create();
-        Bytes bytes = Bytes.valueOf(0, ByteUnits.COMMON.BYTE);
+        Bytes bytes = Bytes.valueOf(0, ByteUnits.BYTE);
 
-        assertThat(bytes.toString())
+        assertThat(formatter.format(bytes))
             .isNotBlank();
     }
 
@@ -62,7 +63,7 @@ public class BytesFormatterTest implements WithAssertions {
         String string = String.valueOf(value);
         DecimalFormat decimalFormatter = new DecimalFormat();
         int decimals = string.length() - 2;
-        Bytes bytes = Bytes.valueOf(value, ByteUnits.COMMON.BYTE);
+        Bytes bytes = Bytes.valueOf(value, ByteUnits.BYTE);
 
         for (int i = 0; i < decimals; i++) {
             decimalFormatter.setMaximumFractionDigits(i);
@@ -81,7 +82,7 @@ public class BytesFormatterTest implements WithAssertions {
     @ArgumentsSource(BytesFormatterFactoryProvider.class)
     @DisplayName("it should show decimal zeroes if not exactly even")
     public void test_zeroes(BytesFormatterFactory formatterFactory) {
-        Bytes bytes = Bytes.valueOf(new BigDecimal("1.001"), ByteUnits.COMMON.BYTE);
+        Bytes bytes = Bytes.valueOf(new BigDecimal("1.001"), ByteUnits.BYTE);
         BytesFormatter formatter = formatterFactory.create(2);
         String result = formatter.format(bytes);
 
@@ -90,12 +91,18 @@ public class BytesFormatterTest implements WithAssertions {
             .startsWith("1.00");
     }
 
+    @Test
+    @DisplayName("it should display all digits if precision is less than zero")
+    public void test_less_than_zero_precision() {
+        // TODO
+    }
+
     @ParameterizedTest
     @ArgumentsSource(BytesFormatterFactoryProvider.class)
-    @DisplayName("it should format value based on locale")
+    @DisplayName("it should be locale aware")
     public void test_locale(BytesFormatterFactory formatterFactory) {
         double value = Math.PI;
-        Bytes bytes = Bytes.valueOf(value, ByteUnits.COMMON.BYTE);
+        Bytes bytes = Bytes.valueOf(value, ByteUnits.BYTE);
         Locale[] locales = Locale.getAvailableLocales();
 
         for (Locale locale : locales) {

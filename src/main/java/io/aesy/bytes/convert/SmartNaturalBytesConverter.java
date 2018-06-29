@@ -1,25 +1,33 @@
-package org.aesy.bytes.convert;
+package io.aesy.bytes.convert;
 
-import org.aesy.bytes.ByteUnit;
-import org.aesy.bytes.ByteUnits;
-import org.aesy.bytes.Bytes;
+import io.aesy.bytes.ByteUnit;
+import io.aesy.bytes.ByteUnits;
+import io.aesy.bytes.Bytes;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class SmartNaturalBytesConverter implements BytesConverter {
+    private static final BigDecimal SIXTEEN = BigDecimal.valueOf(16);
     private static final BigDecimal ONE_THOUSAND = BigDecimal.valueOf(1000);
 
     @Override
     public Bytes convert(Bytes bytes) {
         BigDecimal originalValue = bytes.getValue();
         ByteUnit originalUnit = bytes.getUnit();
-        boolean isLessThanOneThousandBytes = ByteUnits.COMMON.BYTE.convert(bytes)
-                                                                  .getValue().compareTo(ONE_THOUSAND) < 0;
 
-        if (isLessThanOneThousandBytes) {
-            // Values less than 1000 bytes are best viewed as bytes
-            return bytes;
+        Bytes inBytes = ByteUnits.BYTE.convert(bytes);
+
+        if (inBytes.getValue().compareTo(ONE_THOUSAND) < 0) {
+            // Values below this limit are best viewed as bytes
+            return inBytes;
+        }
+
+        Bytes inBits = ByteUnits.BIT.convert(inBytes);
+
+        if (inBits.getValue().compareTo(SIXTEEN) < 0) {
+            // Values below this limit are best viewed as bits
+            return inBits;
         }
 
         ArrayList<ByteUnit> units = new ArrayList<>();
@@ -33,11 +41,12 @@ public class SmartNaturalBytesConverter implements BytesConverter {
             units.addAll(ByteUnits.IEC.units());
             units.addAll(ByteUnits.SI.units());
         } else if (ByteUnits.JEDEC.has(originalUnit)) {
-            // Only use JEDEC units if the original does
+            // Only use JEDEC units if the input object does
             units.addAll(ByteUnits.JEDEC.units());
         } else {
-            // Unknown unit type, use original
-            return bytes;
+            // Convert to anything, but prefer SI
+            units.addAll(ByteUnits.SI.units());
+            units.addAll(ByteUnits.IEC.units());
         }
 
         Bytes best = bytes;
