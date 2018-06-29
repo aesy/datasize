@@ -6,11 +6,12 @@ import io.aesy.bytes.Bytes;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A {@code BytesConverter} converts {@code Bytes} objects to other {@code Bytes} objects.
  */
-public class SmartNaturalBytesConverter implements BytesConverter {
+public class SimpleNaturalBytesConverter implements BytesConverter {
     private static final BigDecimal EIGHT = BigDecimal.valueOf(8);
     private static final BigDecimal ONE_THOUSAND = BigDecimal.valueOf(1000);
 
@@ -45,21 +46,17 @@ public class SmartNaturalBytesConverter implements BytesConverter {
             return inBytes;
         }
 
-        ArrayList<ByteUnit> units = new ArrayList<>();
+        List<ByteUnit> units = new ArrayList<>();
 
+        // Only convert to same unit type as input object
         if (ByteUnits.SI.has(originalUnit)) {
-            // Prefer SI units
             units.addAll(ByteUnits.SI.units());
-            units.addAll(ByteUnits.IEC.units());
         } else if (ByteUnits.IEC.has(originalUnit)) {
-            // Prefer IEC units
             units.addAll(ByteUnits.IEC.units());
-            units.addAll(ByteUnits.SI.units());
         } else if (ByteUnits.JEDEC.has(originalUnit)) {
-            // Only use JEDEC units if the input object does
             units.addAll(ByteUnits.JEDEC.units());
         } else {
-            // Convert to anything, but prefer SI
+            // Unless in bits/bytes, then convert to anything
             units.addAll(ByteUnits.SI.units());
             units.addAll(ByteUnits.IEC.units());
         }
@@ -79,11 +76,8 @@ public class SmartNaturalBytesConverter implements BytesConverter {
             }
 
             boolean isBetterValue = value1.compareTo(value2) < 0;
-            boolean hasBetterScale = value1.toPlainString().length() <
-                                     value2.toPlainString().length();
-            boolean isLessThanOneThousand = best.getValue().compareTo(ONE_THOUSAND) < 0;
 
-            if (isBetterValue || (isLessThanOneThousand && hasBetterScale)) {
+            if (isBetterValue) {
                 best = newBytes;
             }
         }
