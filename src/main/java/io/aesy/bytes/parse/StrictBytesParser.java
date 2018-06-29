@@ -13,8 +13,39 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * {@code StrictBytesParser} is a parser that is case sensitive and don't accept any unexpected
- * characters, including whitespace. TODO
+ * {@code StrictBytesParser} is a parser that is case sensitive and don't accept any unexpected,
+ * or missing, characters - including whitespace.
+ *
+ * <p>
+ * The value portion of the input may be a fractional number of any magnitude and precision.
+ * The value must be formatted according to the given locale. The unit may be formatted
+ * either by its' name or its' abbreviation. The unit name must be all lowercase.
+ * </p>
+ *
+ * <p>
+ * Due to the ambiguousness between SI and JEDEC, SI units will most commonly be preferred over
+ * JEDEC units.
+ * <ul>
+ *   <li>{@literal "1 kB"} will resolve to {@code ByteUnits.SI.KILOBYTE}</li>
+ *   <li>{@literal "1 KB"} will resolve to {@code ByteUnits.JEDEC.KILOBYTE}</li>
+ *   <li>{@literal "1 MB"} and so on will resolve to the SI variations</li>
+ * </ul>
+ * </p>
+ *
+ * <p>
+ * If no locale is provided, {@code Locale.getDefault(Locale.Category.FORMAT)} is used.
+ * </p>
+ *
+ * <blockquote>
+ * <pre>{@code
+ * BytesParser parser = new StrictBytesParser();
+ * Bytes parsed = parser.parse("3.14 KiB");
+ *
+ * assertEquals(parsed, Bytes.valueOf(3.14, ByteUnits.IEC.KIBIBYTE))
+ *
+ * assertThrows(() -> parser.parse("-3.14 KiB"));
+ * }</pre>
+ * </blockquote>
  */
 public class StrictBytesParser implements BytesParser {
     private static final List<ByteUnit> units = ByteUnits.ALL.units();
@@ -42,6 +73,30 @@ public class StrictBytesParser implements BytesParser {
                                    .end();
     }
 
+    /**
+     * Parses an input string to produce a {@code Bytes} object.
+     *
+     * <p>
+     * The value portion of the input may be a fractional number of any magnitude and precision.
+     * The value must be formatted according to the given locale. The unit may be formatted
+     * either by its' name or its' abbreviation. The unit name must be all lowercase.
+     * </p>
+     *
+     * <p>
+     * Due to the ambiguousness between SI and JEDEC, SI units will most commonly be preferred over
+     * JEDEC units.
+     * <ul>
+     *   <li>{@literal "1 kB"} will resolve to {@code ByteUnits.SI.KILOBYTE}</li>
+     *   <li>{@literal "1 KB"} will resolve to {@code ByteUnits.JEDEC.KILOBYTE}</li>
+     *   <li>{@literal "1 MB"} and so on will resolve to the SI variations</li>
+     * </ul>
+     * </p>
+     *
+     * @param input The input string to parse
+     * @return The produced {@code Bytes} object
+     * @throws ParseException If the input string could not be parsed
+     * @throws IllegalArgumentException If the input string is null
+     */
     @Override
     public Bytes parse(String input) throws ParseException {
         Result result;

@@ -25,8 +25,8 @@ import java.util.Locale;
  *
  * <p>
  * All methods featuring comparisons of any kind, including {@code Bytes#equals}, compare the value
- * of the {@code Bytes} objects as {@code ByteUnit.BYTE}, meaning that {@code Bytes.valueOf(1000,
- * ByteUnit.BYTE)} and {@code Bytes.valueOf(1, ByteUnit.SI.KILOBYTE)} are considered equal.
+ * of the {@code Bytes} objects as {@code ByteUnits.BYTE}, meaning that {@code Bytes.valueOf(1000,
+ * ByteUnits.BYTE)} and {@code Bytes.valueOf(1, ByteUnits.SI.KILOBYTE)} are considered equal.
  * </p>
  *
  * <p>
@@ -37,8 +37,8 @@ import java.util.Locale;
  * <blockquote>
  * Example usage:
  * <pre>{@code
- * Bytes bytes1 = Bytes.valueOf(1000, ByteUnit.BYTE);
- * Bytes bytes2 = Bytes.valueOf(1, ByteUnit.SI.KILOBYTE);
+ * Bytes bytes1 = Bytes.valueOf(1000, ByteUnits.BYTE);
+ * Bytes bytes2 = Bytes.valueOf(1, ByteUnits.SI.KILOBYTE);
  *
  * assertTrue(bytes1.equals(bytes2));
  * }</pre>
@@ -64,17 +64,19 @@ public class Bytes implements Comparable<Bytes>, Serializable {
      *
      * @param bytes The byte array
      * @return A new {@code Bytes} object
+     * @throws IllegalArgumentException If the value is less than zero
      */
     public static Bytes valueOf(byte[] bytes) {
-        return valueOf(bytes.length, io.aesy.bytes.ByteUnits.BYTE);
+        return valueOf(bytes.length, ByteUnits.BYTE);
     }
 
     /**
      * Creates a new {@code Bytes} object from a value and a unit.
      *
      * @param value The value
-     * @param unit  The unit
+     * @param unit The unit
      * @return A new {@code Bytes} object
+     * @throws IllegalArgumentException If the value is less than zero
      */
     public static Bytes valueOf(long value, ByteUnit unit) {
         return new Bytes(BigDecimal.valueOf(value), unit);
@@ -84,8 +86,9 @@ public class Bytes implements Comparable<Bytes>, Serializable {
      * Creates a new {@code Bytes} object from a value and a unit.
      *
      * @param value The value
-     * @param unit  The unit
+     * @param unit The unit
      * @return A new {@code Bytes} object
+     * @throws IllegalArgumentException If the value is less than zero
      */
     public static Bytes valueOf(double value, ByteUnit unit) {
         return new Bytes(BigDecimal.valueOf(value), unit);
@@ -95,8 +98,9 @@ public class Bytes implements Comparable<Bytes>, Serializable {
      * Creates a new {@code Bytes} object from a value and a unit.
      *
      * @param value The value
-     * @param unit  The unit
+     * @param unit The unit
      * @return A new {@code Bytes} object
+     * @throws IllegalArgumentException If the value is less than zero
      */
     public static Bytes valueOf(BigInteger value, ByteUnit unit) {
         return new Bytes(new BigDecimal(value), unit);
@@ -106,8 +110,9 @@ public class Bytes implements Comparable<Bytes>, Serializable {
      * Creates a new {@code Bytes} object from a value and a unit.
      *
      * @param value The value
-     * @param unit  The unit
+     * @param unit The unit
      * @return A new {@code Bytes} object
+     * @throws IllegalArgumentException If the value is less than zero
      */
     public static Bytes valueOf(BigDecimal value, ByteUnit unit) {
         return new Bytes(value, unit);
@@ -155,14 +160,14 @@ public class Bytes implements Comparable<Bytes>, Serializable {
      *
      * <p>
      * SI units will always be preferred over JEDEC units, meaning that {@code Bytes.parse("1 kB")}
-     * will result in an object equivalent to {@code Bytes.valueOf(1, ByteUnit.SI.KILOBYTE)}. If
+     * will result in an object equivalent to {@code Bytes.valueOf(1, ByteUnits.SI.KILOBYTE)}. If
      * this behavior is not desired, see a {@code BytesParser} implementation that fits your
      * usecase.
      * </p>
      *
      * @param input The input string to parse
      * @return The produced {@code Bytes} object
-     * @throws ParseException           If the input string could not be parsed
+     * @throws ParseException If the input string could not be parsed
      * @throws IllegalArgumentException If the input string is null
      * @see LenientBytesParser
      */
@@ -177,7 +182,7 @@ public class Bytes implements Comparable<Bytes>, Serializable {
      * Returns the greater of two {@code Bytes} objects. If the given objects are equal, the first
      * argument is returned.
      *
-     * @param first  The first object
+     * @param first The first object
      * @param second The second object
      * @return The lesser of the given objects
      */
@@ -193,7 +198,7 @@ public class Bytes implements Comparable<Bytes>, Serializable {
      * Returns the smaller of two {@code Bytes} objects. If the given objects are equal, the first
      * argument is returned.
      *
-     * @param first  The first object
+     * @param first The first object
      * @param second The second object
      * @return The lesser of the given objects
      */
@@ -301,7 +306,7 @@ public class Bytes implements Comparable<Bytes>, Serializable {
      * <p>
      * The conversion uses {@code SimpleNaturalBytesConverter} internally, which only converts to
      * units of the same {@code ByteUnit.Standard} as this, unless this objects' unit is {@code
-     * ByteUnit.BYTE} by which the resulting unit may be of any available {@code ByteUnit} type.
+     * ByteUnits.BYTE} by which the resulting unit may be of any available {@code ByteUnit} type.
      * </p>
      *
      * @return A new {@code Bytes} object that is equal to this.
@@ -323,12 +328,12 @@ public class Bytes implements Comparable<Bytes>, Serializable {
      *
      * <p>
      * Two {@code Bytes} objects are considered equal if both of their values as {@code
-     * ByteUnit.BYTE} are exactly equal.
+     * ByteUnits.BYTE} are exactly equal.
      * </p>
      *
      * @param other The object to be compared
      * @return A negative integer, zero, or a positive integer as this object is less than, equal
-     *         to, or greater than the specified object
+     *     to, or greater than the specified object
      * @throws IllegalArgumentException If the specified object is null
      */
     @Override
@@ -347,7 +352,7 @@ public class Bytes implements Comparable<Bytes>, Serializable {
      * <ul>
      * <li>neither object is null</li>
      * <li>they both are, or inherit from, {@code Bytes}</li>
-     * <li>they have the same value when converted to {@code ByteUnit.BYTE}</li>
+     * <li>they have the same value when converted to {@code ByteUnits.BYTE}</li>
      * </ul>
      *
      * @param other The reference object with which to compare
@@ -368,7 +373,7 @@ public class Bytes implements Comparable<Bytes>, Serializable {
 
     @Override
     public int hashCode() {
-        return toUnit(io.aesy.bytes.ByteUnits.BYTE)
+        return toUnit(ByteUnits.BYTE)
             .getValue()
             .stripTrailingZeros()
             .hashCode();

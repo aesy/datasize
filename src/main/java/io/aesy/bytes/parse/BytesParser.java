@@ -13,7 +13,7 @@ public interface BytesParser {
      *
      * @param input The input string to parse
      * @return The produced {@code Bytes} object
-     * @throws ParseException           If the input string could not be parsed
+     * @throws ParseException If the input string could not be parsed
      * @throws IllegalArgumentException If the input string is null
      */
     Bytes parse(String input) throws ParseException;

@@ -13,8 +13,34 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * {@code LenientBytesParser} is a parser that is case insensitive and ignore unexpected whitespace
- * characters. TODO
+ * {@code LenientBytesParser} is a parser that is case insensitive and ignore unexpected, or
+ * missing, whitespace characters.
+ *
+ * <p>
+ * The value portion of the input may be a fractional number of any magnitude and precision.
+ * The value must be formatted according to the given locale. The unit portion may be formatted
+ * either by its' name or its' abbreviation.
+ * </p>
+ *
+ * <p>
+ * Due to parsing being case insensitive, the difference between SI and JEDEC units is completely
+ * ambiguous. SI units will always be preferred over JEDEC.
+ * </p>
+ *
+ * <p>
+ * If no locale is provided, {@code Locale.getDefault(Locale.Category.FORMAT)} is used.
+ * </p>
+ *
+ * <blockquote>
+ * <pre>{@code
+ * BytesParser parser = new LenientByteParser();
+ * Bytes parsed = parser.parse(" 3.14kb ");
+ *
+ * assertEquals(parsed, Bytes.valueOf(3.14, ByteUnits.SI.KILOBYTE))
+ *
+ * assertThrows(() -> parser.parse("666 YB :-)"))
+ * }</pre>
+ * </blockquote>
  */
 public class LenientBytesParser implements BytesParser {
     private static final List<ByteUnit> units = ByteUnits.ALL.units();
@@ -44,6 +70,25 @@ public class LenientBytesParser implements BytesParser {
                                      .end();
     }
 
+    /**
+     * Parses an input string to produce a {@code Bytes} object.
+     *
+     * <p>
+     * The value portion of the input may be a fractional number of any magnitude and precision.
+     * The value must be formatted according to the given locale. The unit portion may be formatted
+     * either by its' name or its' abbreviation.
+     * </p>
+     *
+     * <p>
+     * This method is case insensitive which make the difference between SI and JEDEC units is
+     * completely ambiguous. SI units will always be preferred over JEDEC.
+     * </p>
+     *
+     * @param input The input string to parse
+     * @return The produced {@code Bytes} object
+     * @throws ParseException If the input string could not be parsed
+     * @throws IllegalArgumentException If the input string is null
+     */
     @Override
     public Bytes parse(String input) throws ParseException {
         Result result;

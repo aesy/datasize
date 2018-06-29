@@ -7,10 +7,20 @@ import io.aesy.bytes.Bytes;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+/**
+ * A {@code BytesConverter} converts {@code Bytes} objects to other {@code Bytes} objects.
+ */
 public class SmartNaturalBytesConverter implements BytesConverter {
     private static final BigDecimal SIXTEEN = BigDecimal.valueOf(16);
     private static final BigDecimal ONE_THOUSAND = BigDecimal.valueOf(1000);
 
+    /**
+     * Converts a {@code Bytes} object to another {@code Bytes} object.
+     *
+     * @param bytes The Bytes to convert
+     * @return The converted {@code Bytes} object
+     * @throws IllegalArgumentException If the bytes object is null
+     */
     @Override
     public Bytes convert(Bytes bytes) {
         BigDecimal originalValue = bytes.getValue();

@@ -27,7 +27,7 @@ import java.util.Locale;
  * <blockquote>
  * Example usage:
  * <pre>{@code
- * Bytes bytes = Bytes.valueOf(Math.PI, ByteUnit.SI.KILOBYTE);
+ * Bytes bytes = Bytes.valueOf(Math.PI, ByteUnits.SI.KILOBYTE);
  * String formatted = new SimpleBytesFormatter(Locale.US, 2).format(bytes);
  *
  * assertEquals(formatted, "3.14 kB");
@@ -75,7 +75,7 @@ public class SimpleBytesFormatter implements BytesFormatter {
     /**
      * Creates a {@code SimpleBytesFormatter} with the desired locale and precision.
      *
-     * @param locale    The locale to use
+     * @param locale The locale to use
      * @param precision The precision to use
      * @throws IllegalArgumentException If the locale object is null
      */

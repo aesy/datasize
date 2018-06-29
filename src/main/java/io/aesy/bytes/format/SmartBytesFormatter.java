@@ -32,7 +32,7 @@ import java.util.Locale;
  * <blockquote>
  * Example usage:
  * <pre>{@code
- * Bytes bytes = Bytes.valueOf(1024, ByteUnit.IEC.KIBIBYTE);
+ * Bytes bytes = Bytes.valueOf(1024, ByteUnits.IEC.KIBIBYTE);
  * String formatted = new SmartBytesFormatter(Locale.US, 2).format(bytes);
  *
  * assertEquals(formatted, "1 MiB");
@@ -81,7 +81,7 @@ public class SmartBytesFormatter implements BytesFormatter {
     /**
      * Creates a {@code SmartBytesFormatter} with the desired locale and precision.
      *
-     * @param locale    The locale to use
+     * @param locale The locale to use
      * @param precision The precision to use
      * @throws IllegalArgumentException If the locale object is null
      */
