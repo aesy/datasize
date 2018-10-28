@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="${project.name}">
+
+    <!--<bannerLeft>-->
+        <!--<getName></getName>-->
+    <!--</bannerLeft>-->
+
+    <publishDate position="none" />
+
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.7</version>
+    </skin>
+
+    <custom>
+        <fluidoSkin>
+            <sideBarEnabled>true</sideBarEnabled>
+            <skipGenerationDate>true</skipGenerationDate>
+            <gitHub>
+                <projectId>apache/maven-skins</projectId>
+                <ribbonOrientation>right</ribbonOrientation>
+                <ribbonColor>black</ribbonColor>
+            </gitHub>
+        </fluidoSkin>
+    </custom>
+
+    <body>
+        <menu name="About">
+            <item name="Introduction" href="introduction.html" />
+            <item name="Usage" href="usage.html" />
+        </menu>
+
+        <menu name="Usage" ref="reports" />
+    </body>
+</project>
