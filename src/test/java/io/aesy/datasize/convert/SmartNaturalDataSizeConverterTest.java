@@ -31,7 +31,7 @@ public class SmartNaturalDataSizeConverterTest implements WithAssertions {
     }
 
     @BeforeEach
-    public static void setup() {
+    public void setup() {
         Locale.setDefault(Locale.US);
     }
 

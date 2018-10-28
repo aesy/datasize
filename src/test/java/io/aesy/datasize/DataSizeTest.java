@@ -1,15 +1,35 @@
 package io.aesy.datasize;
 
 import org.assertj.core.api.WithAssertions;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Locale;
+import java.util.stream.IntStream;
 
 public class DataSizeTest implements WithAssertions {
+    private static final Collection<DataUnit> ALL_UNITS;
+
+    static {
+        ALL_UNITS = new ArrayList<>();
+        ALL_UNITS.add(ByteUnit.BYTE);
+        ALL_UNITS.add(BitUnit.BIT);
+        ALL_UNITS.addAll(ByteUnit.SI.values());
+        ALL_UNITS.addAll(ByteUnit.IEC.values());
+        ALL_UNITS.addAll(ByteUnit.JEDEC.values());
+        ALL_UNITS.addAll(BitUnit.SI.values());
+        ALL_UNITS.addAll(BitUnit.IEC.values());
+        ALL_UNITS.addAll(BitUnit.JEDEC.values());
+    }
+
     @BeforeEach
     public void setup() {
         Locale.setDefault(Locale.US);
@@ -174,59 +194,59 @@ public class DataSizeTest implements WithAssertions {
             .isEqualTo(diff2);
     }
 
-    // @Test
-    // @DisplayName("it should increment")
-    // public void test_increment() {
-    //     for (DataUnit unit : ByteUnit.ALL.units()) {
-    //         IntStream.range(0, 10)
-    //                  .forEach(i -> {
-    //                      DataSize bytes = DataSize.of(i, unit)
-    //                                         .increment();
-    //
-    //                      assertThat(bytes.getValue())
-    //                          .isNotNull()
-    //                          .isEqualByComparingTo(BigDecimal.valueOf(i + 1));
-    //
-    //                      assertThat(bytes.getUnit())
-    //                          .isNotNull()
-    //                          .isEqualTo(unit);
-    //                  });
-    //     }
-    // }
+    @Test
+    @DisplayName("it should increment")
+    public void test_increment() {
+        for (DataUnit unit : ALL_UNITS) {
+            IntStream.range(0, 10)
+                     .forEach(i -> {
+                         DataSize bytes = DataSize.of(i, unit)
+                                            .increment();
 
-    // @Test
-    // @DisplayName("it should decrement")
-    // public void test_decrement() {
-    //     for (DataUnit unit : ByteUnit.ALL.units()) {
-    //         IntStream.range(0, 10)
-    //                  .forEach(i -> {
-    //                      DataSize bytes = DataSize.of(i, unit)
-    //                                         .decrement();
-    //
-    //                      assertThat(bytes.getValue())
-    //                          .isNotNull()
-    //                          .isEqualByComparingTo(BigDecimal.valueOf(Math.max(0, i - 1)));
-    //
-    //                      assertThat(bytes.getUnit())
-    //                          .isNotNull()
-    //                          .isEqualTo(unit);
-    //                  });
-    //     }
-    // }
+                         assertThat(bytes.getValue())
+                             .isNotNull()
+                             .isEqualByComparingTo(BigDecimal.valueOf(i + 1));
 
-    // @Test
-    // @DisplayName("it should be convertable to other units")
-    // public void test_toUnit() {
-    //     DataSize bytes = DataSize.of(1, ByteUnit.BYTE);
-    //
-    //     for (DataUnit unit : ByteUnit.ALL.units()) {
-    //         DataSize converted = bytes.toUnit(unit);
-    //
-    //         assertThat(converted.getUnit())
-    //             .isNotNull()
-    //             .isEqualTo(unit);
-    //     }
-    // }
+                         assertThat(bytes.getUnit())
+                             .isNotNull()
+                             .isEqualTo(unit);
+                     });
+        }
+    }
+
+    @Test
+    @DisplayName("it should decrement")
+    public void test_decrement() {
+        for (DataUnit unit : ALL_UNITS) {
+            IntStream.range(0, 10)
+                     .forEach(i -> {
+                         DataSize bytes = DataSize.of(i, unit)
+                                            .decrement();
+
+                         assertThat(bytes.getValue())
+                             .isNotNull()
+                             .isEqualByComparingTo(BigDecimal.valueOf(Math.max(0, i - 1)));
+
+                         assertThat(bytes.getUnit())
+                             .isNotNull()
+                             .isEqualTo(unit);
+                     });
+        }
+    }
+
+    @Test
+    @DisplayName("it should be convertable to other units")
+    public void test_toUnit() {
+        DataSize bytes = DataSize.of(1, ByteUnit.BYTE);
+
+        for (DataUnit unit : ALL_UNITS) {
+            DataSize converted = bytes.toUnit(unit);
+
+            assertThat(converted.getUnit())
+                .isNotNull()
+                .isEqualTo(unit);
+        }
+    }
 
     @Test
     @DisplayName("it should be comparable similarly to numbers and be equal if and only if their " +
