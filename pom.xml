@@ -5,17 +5,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.aesy</groupId>
-    <artifactId>bytes</artifactId>
+    <artifactId>datasize</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Bytes</name>
+    <name>DataSize</name>
     <description>A utility library for working with information units</description>
     <inceptionYear>2018</inceptionYear>
-    <url>https://github.com/aesy/bytes</url>
+    <url>https://github.com/aesy/datasize</url>
 
     <issueManagement>
-        <url>https://github.com/aesy/bytes/issues</url>
+        <url>https://github.com/aesy/datasize/issues</url>
         <system>GitHub Issues</system>
     </issueManagement>
 
@@ -28,9 +28,9 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/aesy/bytes</url>
-        <connection>scm:git:git://github.com/aesy/bytes.git</connection>
-        <developerConnection>scm:git:git@github.com:aesy/bytes.git</developerConnection>
+        <url>https://github.com/aesy/datasize</url>
+        <connection>scm:git:git://github.com/aesy/datasize.git</connection>
+        <developerConnection>scm:git:git@github.com:aesy/datasize.git</developerConnection>
         <tag>master</tag>
     </scm>
 
@@ -45,7 +45,7 @@
 
     <contributors>
         <contributor>
-            <url>https://github.com/aesy/bytes/graphs/contributors</url>
+            <url>https://github.com/aesy/datasize/graphs/contributors</url>
         </contributor>
     </contributors>
 
