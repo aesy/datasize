@@ -1,9 +1,15 @@
 sudo: false
+notifications:
+    email: false
 language: java
 jdk:
   - oraclejdk8
   - oraclejdk11
   - openjdk8
   - openjdk11
-notifications:
-    email: false
+script:
+  - mvn checkstyle:check
+  - mvn package -Dcheckstyle.skip -DgenerateReports=false -DskipTests
+  - mvn test jacoco:report
+after_success:
+  - mvn test coveralls:report
