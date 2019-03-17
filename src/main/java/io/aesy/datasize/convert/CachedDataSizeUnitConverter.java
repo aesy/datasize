@@ -9,11 +9,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CachedDataSizeUnitConverter implements DataSizeConverter {
-    private final Map<Conversion, BigDecimal> cache;
+    private static final Map<Conversion, BigDecimal> cache = new HashMap<>();
+
     private final DataUnit toUnit;
 
     public CachedDataSizeUnitConverter(DataUnit unit) {
-        this.cache = new HashMap<>();
         this.toUnit = unit;
     }
 
@@ -46,7 +46,7 @@ public class CachedDataSizeUnitConverter implements DataSizeConverter {
         private final DataUnit from;
         private final DataUnit to;
 
-        Conversion(DataUnit from, DataUnit to) {
+        private Conversion(DataUnit from, DataUnit to) {
             this.from = from;
             this.to = to;
         }
