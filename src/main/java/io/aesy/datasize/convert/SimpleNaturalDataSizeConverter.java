@@ -6,9 +6,8 @@ import io.aesy.datasize.DataSize;
 import io.aesy.datasize.DataUnit;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A {@code DataSizeConverter} converts {@code DataSize} objects to other {@code DataSize} objects.
@@ -16,24 +15,16 @@ import java.util.List;
 public class SimpleNaturalDataSizeConverter implements DataSizeConverter {
     private static final BigDecimal EIGHT;
     private static final BigDecimal ONE_THOUSAND;
-    private static final List<DataUnit> BYTE_UNITS;
-    private static final List<DataUnit> BIT_UNITS;
+    private static final Collection<DataUnit> ALL_KNOWN_UNITS;
 
     static {
-        EIGHT = BigDecimal.valueOf(8L);
-        ONE_THOUSAND = BigDecimal.valueOf(1000L);
+        EIGHT = BigDecimal.valueOf(8);
+        ONE_THOUSAND = BigDecimal.valueOf(1000);
 
-        BYTE_UNITS = new ArrayList<>();
-        BYTE_UNITS.add(ByteUnit.BYTE);
-        BYTE_UNITS.addAll(ByteUnit.SI.values());
-        BYTE_UNITS.addAll(ByteUnit.IEC.values());
-        BYTE_UNITS.addAll(ByteUnit.JEDEC.values());
-
-        BIT_UNITS = new ArrayList<>();
-        BIT_UNITS.add(BitUnit.BIT);
-        BIT_UNITS.addAll(BitUnit.SI.values());
-        BIT_UNITS.addAll(BitUnit.IEC.values());
-        BIT_UNITS.addAll(BitUnit.JEDEC.values());
+        Collection<DataUnit> units = new ArrayList<>();
+        units.addAll(BitUnit.values());
+        units.addAll(ByteUnit.values());
+        ALL_KNOWN_UNITS = units;
     }
 
     /**
@@ -47,7 +38,7 @@ public class SimpleNaturalDataSizeConverter implements DataSizeConverter {
     public DataSize convert(DataSize dataSize) {
         DataUnit originalUnit = dataSize.getUnit();
 
-        if (!BYTE_UNITS.contains(originalUnit)) {
+        if (!ALL_KNOWN_UNITS.contains(originalUnit)) {
             // Unknown unit, use original
             return dataSize;
         }
@@ -66,19 +57,14 @@ public class SimpleNaturalDataSizeConverter implements DataSizeConverter {
             return inDataSize;
         }
 
-        Collection<DataUnit> units = new ArrayList<>();
+        Collection<DataUnit> units = ALL_KNOWN_UNITS;
 
-        // Only convert to same unit type as input object
-        if (ByteUnit.SI.values().contains(originalUnit)) {
-            units.addAll(ByteUnit.SI.values());
-        } else if (ByteUnit.IEC.values().contains(originalUnit)) {
-            units.addAll(ByteUnit.IEC.values());
-        } else if (ByteUnit.JEDEC.values().contains(originalUnit)) {
-            units.addAll(ByteUnit.JEDEC.values());
-        } else {
-            // Unless in bits/bytes, then convert to anything
-            units.addAll(ByteUnit.SI.values());
-            units.addAll(ByteUnit.IEC.values());
+        if (!BitUnit.BIT.equals(originalUnit) && !ByteUnit.BYTE.equals(originalUnit)) {
+            // Only convert to same unit type as input object
+            units = ALL_KNOWN_UNITS
+                .stream()
+                .filter(unit -> unit.getClass().isAssignableFrom(originalUnit.getClass()))
+                .collect(Collectors.toList());
         }
 
         DataSize best = dataSize;

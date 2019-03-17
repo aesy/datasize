@@ -2,11 +2,13 @@ package io.aesy.datasize;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @SuppressWarnings("javadocVariable")
-public final class BitUnit implements DataUnit {
+public class BitUnit implements DataUnit {
     public static final DataUnit BIT;
 
     private static final MathContext CONTEXT;
@@ -20,11 +22,12 @@ public final class BitUnit implements DataUnit {
     private final String name;
     private final BigDecimal bytes;
 
-    private BitUnit(String abbreviation, String name, int base, int exponent) {
+    protected BitUnit(String abbreviation, String name, int base, int exponent) {
         this.abbreviation = abbreviation;
         this.name = name;
         this.bytes = BigDecimal.valueOf(base)
-                               .pow(exponent, CONTEXT);
+                               .pow(exponent, CONTEXT)
+                               .divide(BigDecimal.valueOf(8), MathContext.UNLIMITED);
     }
 
     @Override
@@ -47,51 +50,84 @@ public final class BitUnit implements DataUnit {
         return abbreviation;
     }
 
-    public static final class SI {
-        public static final DataUnit KILOBIT = new BitUnit("kbit", "kilobit", 10, 3);
-        public static final DataUnit MEGABIT = new BitUnit("mbit", "megabit", 10, 6);
-        public static final DataUnit GIGABIT = new BitUnit("gbit", "gigabit", 10, 9);
-        public static final DataUnit TERABIT = new BitUnit("tbit", "terabit", 10, 12);
-        public static final DataUnit PETABIT = new BitUnit("pbit", "petabit", 10, 15);
-        public static final DataUnit EXABIT = new BitUnit("ebit", "exabit", 10, 18);
-        public static final DataUnit ZETTABIT = new BitUnit("zbit", "zettabit", 10, 21);
-        public static final DataUnit YOTTABIT = new BitUnit("ybit", "yottabit", 10, 24);
+    public static List<DataUnit> values() {
+        List<DataUnit> units = new ArrayList<>();
+        units.add(BIT);
+        units.addAll(SI.values());
+        units.addAll(IEC.values());
+        units.addAll(JEDEC.values());
 
-        private SI() {}
+        return Collections.unmodifiableList(units);
+    }
+
+    public static class SI extends BitUnit {
+        public static final DataUnit KILOBIT = new SI("kbit", "kilobit", 3);
+        public static final DataUnit MEGABIT = new SI("mbit", "megabit", 6);
+        public static final DataUnit GIGABIT = new SI("gbit", "gigabit", 9);
+        public static final DataUnit TERABIT = new SI("tbit", "terabit", 12);
+        public static final DataUnit PETABIT = new SI("pbit", "petabit", 15);
+        public static final DataUnit EXABIT = new SI("ebit", "exabit", 18);
+        public static final DataUnit ZETTABIT = new SI("zbit", "zettabit", 21);
+        public static final DataUnit YOTTABIT = new SI("ybit", "yottabit", 24);
+
+        private static final List<DataUnit> ALL;
+
+        static {
+            ALL = Collections.unmodifiableList(
+                Arrays.asList(KILOBIT, MEGABIT, GIGABIT, TERABIT, PETABIT, EXABIT, ZETTABIT, YOTTABIT));
+        }
+
+        protected SI(String abbreviation, String name, int exponent) {
+            super(abbreviation, name, 10, exponent);
+        }
 
         public static List<DataUnit> values() {
-            return Arrays.asList(KILOBIT, MEGABIT, GIGABIT, TERABIT, PETABIT, EXABIT, ZETTABIT,
-                                 YOTTABIT);
+            return ALL;
         }
     }
 
-    public static final class IEC {
-        public static final DataUnit KIBIBIT = new BitUnit("Kibit", "kibibit", 2, 10);
-        public static final DataUnit MEBIBIT = new BitUnit("Mibit", "mebibit", 2, 20);
-        public static final DataUnit GIBIBIT = new BitUnit("Gibit", "gibibit", 2, 30);
-        public static final DataUnit TEBIBIT = new BitUnit("Tibit", "tebibit", 2, 40);
-        public static final DataUnit PEBIBIT = new BitUnit("Pibit", "pebibit", 2, 50);
-        public static final DataUnit EXBIBIT = new BitUnit("Eibit", "exbibit", 2, 60);
-        public static final DataUnit ZEBIBIT = new BitUnit("Zibit", "zebibit", 2, 70);
-        public static final DataUnit YOBIBIT = new BitUnit("Yibit", "yobibit", 2, 80);
+    public static class IEC extends BitUnit {
+        public static final DataUnit KIBIBIT = new IEC("Kibit", "kibibit", 10);
+        public static final DataUnit MEBIBIT = new IEC("Mibit", "mebibit", 20);
+        public static final DataUnit GIBIBIT = new IEC("Gibit", "gibibit", 30);
+        public static final DataUnit TEBIBIT = new IEC("Tibit", "tebibit", 40);
+        public static final DataUnit PEBIBIT = new IEC("Pibit", "pebibit", 50);
+        public static final DataUnit EXBIBIT = new IEC("Eibit", "exbibit", 60);
+        public static final DataUnit ZEBIBIT = new IEC("Zibit", "zebibit", 70);
+        public static final DataUnit YOBIBIT = new IEC("Yibit", "yobibit", 80);
 
-        private IEC() {}
+        private static final List<DataUnit> ALL;
 
+        static {
+            ALL = Collections.unmodifiableList(
+                Arrays.asList(KIBIBIT, MEBIBIT, GIBIBIT, TEBIBIT, PEBIBIT, EXBIBIT, ZEBIBIT, YOBIBIT));
+        }
+
+        protected IEC(String abbreviation, String name, int exponent) {
+            super(abbreviation, name, 2, exponent);
+        }
         public static List<DataUnit> values() {
-            return Arrays.asList(KIBIBIT, MEBIBIT, GIBIBIT, TEBIBIT, PEBIBIT, EXBIBIT, ZEBIBIT,
-                                 YOBIBIT);
+            return ALL;
         }
     }
 
-    public static final class JEDEC {
-        public static final DataUnit KILOBIT = new BitUnit("Kbit", "kilobit", 2, 10);
-        public static final DataUnit MEGABIT = new BitUnit("Mbit", "megabit", 2, 20);
-        public static final DataUnit GIGABIT = new BitUnit("Gbit", "gigabit", 2, 30);
+    public static class JEDEC extends BitUnit {
+        public static final DataUnit KILOBIT = new JEDEC("Kbit", "kilobit", 10);
+        public static final DataUnit MEGABIT = new JEDEC("Mbit", "megabit", 20);
+        public static final DataUnit GIGABIT = new JEDEC("Gbit", "gigabit", 30);
 
-        private JEDEC() {}
+        private static final List<DataUnit> ALL;
+
+        static {
+            ALL = Collections.unmodifiableList(Arrays.asList(KILOBIT, MEGABIT, GIGABIT));
+        }
+
+        protected JEDEC(String abbreviation, String name, int exponent) {
+            super(abbreviation, name, 2, exponent);
+        }
 
         public static List<DataUnit> values() {
-            return Arrays.asList(KILOBIT, MEGABIT, GIGABIT);
+            return ALL;
         }
     }
 }

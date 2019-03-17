@@ -10,7 +10,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
-import java.util.stream.IntStream;
 
 /**
  * Tests properties unique to {@code SmartNaturalDataSizeConverter}.
@@ -20,14 +19,8 @@ public class SmartNaturalDataSizeConverterTest implements WithAssertions {
 
     static {
         ALL_UNITS = new ArrayList<>();
-        ALL_UNITS.add(ByteUnit.BYTE);
-        ALL_UNITS.add(BitUnit.BIT);
-        ALL_UNITS.addAll(ByteUnit.SI.values());
-        ALL_UNITS.addAll(ByteUnit.IEC.values());
-        ALL_UNITS.addAll(ByteUnit.JEDEC.values());
-        ALL_UNITS.addAll(BitUnit.SI.values());
-        ALL_UNITS.addAll(BitUnit.IEC.values());
-        ALL_UNITS.addAll(BitUnit.JEDEC.values());
+        ALL_UNITS.addAll(BitUnit.values());
+        ALL_UNITS.addAll(ByteUnit.values());
     }
 
     @BeforeEach
@@ -72,30 +65,5 @@ public class SmartNaturalDataSizeConverterTest implements WithAssertions {
                 .isNotNull()
                 .isEqualTo(unit);
         }
-    }
-
-    @Test
-    @DisplayName("it should not convert to JEDEC unless used in source object")
-    public void test_jedec() {
-        DataSizeConverter converter = new SmartNaturalDataSizeConverter();
-        // TODO don't try 10_000 numbers, pick them wisely instead...
-
-        IntStream.range(1000, 10_000)
-                 .forEach(i -> {
-                     for (DataUnit unit : ALL_UNITS) {
-                         DataSize bytes = DataSize.of(i, unit);
-                         DataSize converted = converter.convert(bytes);
-
-                         assertThat(converted)
-                             .isNotNull();
-
-                         assertThat(converted.getUnit())
-                             .isNotNull()
-                             .matches(convertedUnit -> {
-                                 return ByteUnit.JEDEC.values().contains(convertedUnit) ==
-                                        ByteUnit.JEDEC.values().contains(unit);
-                             });
-                     }
-                 });
     }
 }

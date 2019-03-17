@@ -21,14 +21,8 @@ public class StrictDataSizeParserTest implements WithAssertions {
 
     static {
         ALL_UNITS = new ArrayList<>();
-        ALL_UNITS.add(ByteUnit.BYTE);
-        ALL_UNITS.add(BitUnit.BIT);
-        ALL_UNITS.addAll(ByteUnit.SI.values());
-        ALL_UNITS.addAll(ByteUnit.IEC.values());
-        ALL_UNITS.addAll(ByteUnit.JEDEC.values());
-        ALL_UNITS.addAll(BitUnit.SI.values());
-        ALL_UNITS.addAll(BitUnit.IEC.values());
-        ALL_UNITS.addAll(BitUnit.JEDEC.values());
+        ALL_UNITS.addAll(BitUnit.values());
+        ALL_UNITS.addAll(ByteUnit.values());
     }
 
     @BeforeEach
