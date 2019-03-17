@@ -8,14 +8,14 @@
 [maven-central-image]: https://img.shields.io/maven-central/v/io.aesy/datasize.svg
 [maven-central-url]: https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.aesy%22%20datasize
 
-[travis-image]: https://img.shields.io/travis/aesy/DataSize.svg
-[travis-url]: https://travis-ci.org/aesy/DataSize
+[travis-image]: https://img.shields.io/travis/aesy/datasize.svg
+[travis-url]: https://travis-ci.org/aesy/datasize
 
-[coveralls-image]: https://coveralls.io/repos/github/aesy/DataSize/badge.svg?branch=master
-[coveralls-url]: https://coveralls.io/github/aesy/DataSize?branch=master
+[coveralls-image]: https://coveralls.io/repos/github/aesy/datasize/badge.svg?branch=master
+[coveralls-url]: https://coveralls.io/github/aesy/datasize?branch=master
 
-[license-image]: https://img.shields.io/github/license/aesy/DataSize.svg
-[license-url]: https://github.com/aesy/DataSize/blob/master/LICENSE
+[license-image]: https://img.shields.io/github/license/aesy/datasize.svg
+[license-url]: https://github.com/aesy/datasize/blob/master/LICENSE
 
 A small utility library for working with units of digital information, featuring:
 
@@ -26,7 +26,7 @@ A small utility library for working with units of digital information, featuring
 
 Built for Java 8+.
 
-### [API Reference](https://aesy.github.io/DataSize/apidocs/)
+### [API Reference](https://aesy.github.io/datasize/apidocs/)
 
 ## Usage
 
