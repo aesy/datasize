@@ -51,9 +51,9 @@ public class GenericDataSizeParserTest implements WithAssertions {
     @DisplayName("it should produce a DataSize object")
     public void test_return(DataSizeParserFactory parserFactory) throws ParseException {
         DataSizeParser parser = parserFactory.create();
-        DataSize bytes = parser.parse("1 B");
+        DataSize dataSize = parser.parse("1 B");
 
-        assertThat(bytes)
+        assertThat(dataSize)
             .isNotNull();
     }
 
@@ -70,12 +70,12 @@ public class GenericDataSizeParserTest implements WithAssertions {
         for (String string : strings) {
             String input = String.format("%s B", string);
 
-            DataSize bytes = parser.parse(input);
+            DataSize dataSize = parser.parse(input);
 
-            assertThat(bytes)
+            assertThat(dataSize)
                 .isNotNull();
 
-            assertThat(bytes.getValue())
+            assertThat(dataSize.getValue())
                 .isNotNull()
                 .isEqualTo(new BigDecimal(string));
         }
@@ -116,12 +116,12 @@ public class GenericDataSizeParserTest implements WithAssertions {
         Locale[] locales = Locale.getAvailableLocales();
 
         for (Locale locale : locales) {
-            DataSizeParser bytesParser = parserFactory.create(locale);
+            DataSizeParser dataSizeParser = parserFactory.create(locale);
             NumberFormat decimalFormatter = NumberFormat.getNumberInstance(locale);
             decimalFormatter.setMaximumFractionDigits(5);
 
             String input = String.format("%s %s", decimalFormatter.format(value), ByteUnit.BYTE);
-            DataSize result = bytesParser.parse(input);
+            DataSize result = dataSizeParser.parse(input);
 
             assertThat(result)
                 .isNotNull();

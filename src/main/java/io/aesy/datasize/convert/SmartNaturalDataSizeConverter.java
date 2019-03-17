@@ -78,9 +78,7 @@ public class SmartNaturalDataSizeConverter implements DataSizeConverter {
             boolean hasBetterScale = value1.toPlainString().length() < value2.toPlainString().length();
             boolean isLessThanOneThousand = value1.compareTo(ONE_THOUSAND) < 0;
 
-            if ((isBetterValue || (isSameValue && isSameUnitType)) ||
-                (isLessThanOneThousand && hasBetterScale))
-            {
+            if ((isBetterValue || (isSameValue && isSameUnitType)) || (isLessThanOneThousand && hasBetterScale)) {
                 best = newBytes;
             }
         }

@@ -43,9 +43,9 @@ public class GenericDataSizeFormatterTest implements WithAssertions {
     @DisplayName("it should produce a non-empty string")
     public void test_return(DataSizeFormatterFactory formatterFactory) {
         DataSizeFormatter formatter = formatterFactory.create();
-        DataSize bytes = DataSize.of(0, ByteUnit.BYTE);
+        DataSize dataSize = DataSize.of(0, ByteUnit.BYTE);
 
-        assertThat(formatter.format(bytes))
+        assertThat(formatter.format(dataSize))
             .isNotBlank();
     }
 
@@ -56,14 +56,14 @@ public class GenericDataSizeFormatterTest implements WithAssertions {
     public void test_cap_decimals(DataSizeFormatterFactory formatterFactory) {
         double value = Math.PI;
         DecimalFormat decimalFormatter = new DecimalFormat();
-        DataSize bytes = DataSize.of(value, ByteUnit.BYTE);
+        DataSize dataSize = DataSize.of(value, ByteUnit.BYTE);
 
         for (int i = 0; i < 10; i++) {
             decimalFormatter.setMaximumFractionDigits(i);
             String expected = decimalFormatter.format(value);
 
-            DataSizeFormatter bytesFormatter = formatterFactory.create(i);
-            String result = bytesFormatter.format(bytes);
+            DataSizeFormatter dataSizeFormatter = formatterFactory.create(i);
+            String result = dataSizeFormatter.format(dataSize);
 
             assertThat(result)
                 .isNotBlank()
@@ -77,10 +77,10 @@ public class GenericDataSizeFormatterTest implements WithAssertions {
     public void test_all_decimals(DataSizeFormatterFactory formatterFactory) {
         double value = Math.PI;
         String expected = String.valueOf(value);
-        DataSize bytes = DataSize.of(value, ByteUnit.BYTE);
+        DataSize dataSize = DataSize.of(value, ByteUnit.BYTE);
 
-        DataSizeFormatter bytesFormatter = formatterFactory.create(Locale.US, -1);
-        String result = bytesFormatter.format(bytes);
+        DataSizeFormatter dataSizeFormatter = formatterFactory.create(Locale.US, -1);
+        String result = dataSizeFormatter.format(dataSize);
 
         assertThat(result)
             .isNotBlank()
@@ -91,9 +91,9 @@ public class GenericDataSizeFormatterTest implements WithAssertions {
     @ArgumentsSource(DataSizeFormatterFactoryProvider.class)
     @DisplayName("it should show decimal zeroes if not exactly even")
     public void test_zeroes(DataSizeFormatterFactory formatterFactory) {
-        DataSize bytes = DataSize.of(new BigDecimal("1.001"), ByteUnit.BYTE);
+        DataSize dataSize = DataSize.of(new BigDecimal("1.001"), ByteUnit.BYTE);
         DataSizeFormatter formatter = formatterFactory.create(2);
-        String result = formatter.format(bytes);
+        String result = formatter.format(dataSize);
 
         assertThat(result)
             .isNotBlank()
@@ -105,16 +105,16 @@ public class GenericDataSizeFormatterTest implements WithAssertions {
     @DisplayName("it should be locale aware")
     public void test_locale(DataSizeFormatterFactory formatterFactory) {
         double value = Math.PI;
-        DataSize bytes = DataSize.of(value, ByteUnit.BYTE);
+        DataSize dataSize = DataSize.of(value, ByteUnit.BYTE);
         Locale[] locales = Locale.getAvailableLocales();
 
         for (Locale locale : locales) {
-            DataSizeFormatter bytesFormatter = formatterFactory.create(locale, 5);
+            DataSizeFormatter dataSizeFormatter = formatterFactory.create(locale, 5);
             NumberFormat decimalFormatter = NumberFormat.getNumberInstance(locale);
             decimalFormatter.setMaximumFractionDigits(5);
 
             String expected = decimalFormatter.format(value);
-            String result = bytesFormatter.format(bytes);
+            String result = dataSizeFormatter.format(dataSize);
 
             assertThat(result)
                 .isNotBlank()

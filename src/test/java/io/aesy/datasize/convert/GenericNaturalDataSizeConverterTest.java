@@ -105,9 +105,9 @@ public class GenericNaturalDataSizeConverterTest implements WithAssertions {
         expected.put(DataSize.of(new BigDecimal("1000000000"), ByteUnit.BYTE), ByteUnit.SI.GIGABYTE);
 
         for (Map.Entry<DataSize, DataUnit> entry : expected.entrySet()) {
-            DataSize bytes = entry.getKey();
+            DataSize dataSize = entry.getKey();
             DataUnit unit = entry.getValue();
-            DataSize converted = converter.convert(bytes);
+            DataSize converted = converter.convert(dataSize);
 
             assertThat(converted)
                 .isNotNull();
@@ -140,12 +140,12 @@ public class GenericNaturalDataSizeConverterTest implements WithAssertions {
             }
         };
 
-        DataSize bytes = DataSize.of(1, unknownUnit);
-        DataSize result = converter.convert(bytes);
+        DataSize dataSize = DataSize.of(1, unknownUnit);
+        DataSize result = converter.convert(dataSize);
 
         assertThat(result)
             .isNotNull()
             .isEqualTo(result)
-            .isSameAs(bytes);
+            .isSameAs(dataSize);
     }
 }

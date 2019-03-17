@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import java.util.Locale;
 
 /**
- * Tests properties unique to {@code SimpleNaturalBytesConverter}.
+ * Tests properties unique to {@code SimpleNaturalDataSizeConverter}.
  */
 public class SimpleNaturalDataSizeConverterTest implements WithAssertions {
     @BeforeEach

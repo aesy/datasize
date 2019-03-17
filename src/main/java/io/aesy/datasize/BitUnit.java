@@ -106,6 +106,7 @@ public class BitUnit implements DataUnit {
         protected IEC(String abbreviation, String name, int exponent) {
             super(abbreviation, name, 2, exponent);
         }
+
         public static List<DataUnit> values() {
             return ALL;
         }

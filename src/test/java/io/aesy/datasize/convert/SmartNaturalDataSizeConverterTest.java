@@ -54,9 +54,9 @@ public class SmartNaturalDataSizeConverterTest implements WithAssertions {
         expected.put(DataSize.of(1024, ByteUnit.JEDEC.MEGABYTE), ByteUnit.JEDEC.GIGABYTE);
 
         for (Map.Entry<DataSize, DataUnit> entry : expected.entrySet()) {
-            DataSize bytes = entry.getKey();
+            DataSize dataSize = entry.getKey();
             DataUnit unit = entry.getValue();
-            DataSize converted = converter.convert(bytes);
+            DataSize converted = converter.convert(dataSize);
 
             assertThat(converted)
                 .isNotNull();

@@ -66,9 +66,9 @@ public class DataSizeTest implements WithAssertions {
     public void test_immutable() {
         BigDecimal value = BigDecimal.valueOf(1.23);
         DataUnit unit = ByteUnit.BYTE;
-        DataSize bytes = DataSize.of(value, unit);
+        DataSize dataSize = DataSize.of(value, unit);
 
-        bytes.add(DataSize.of(Math.PI, ByteUnit.SI.KILOBYTE))
+        dataSize.add(DataSize.of(Math.PI, ByteUnit.SI.KILOBYTE))
              .subtract(DataSize.of(Math.E, ByteUnit.JEDEC.GIGABYTE))
              .increment()
              .increment()
@@ -76,11 +76,11 @@ public class DataSizeTest implements WithAssertions {
              .toNaturalUnit()
              .toUnit(ByteUnit.SI.YOTTABYTE);
 
-        assertThat(bytes.getValue())
+        assertThat(dataSize.getValue())
             .isNotNull()
             .isEqualTo(value);
 
-        assertThat(bytes.getUnit())
+        assertThat(dataSize.getUnit())
             .isNotNull()
             .isEqualTo(unit);
     }
@@ -89,10 +89,10 @@ public class DataSizeTest implements WithAssertions {
     @Test
     @DisplayName("it should be able to parse its own string representation")
     public void test_parse() throws ParseException {
-        DataSize bytes = DataSize.of(1.23, ByteUnit.BYTE);
+        DataSize dataSize = DataSize.of(1.23, ByteUnit.BYTE);
 
-        assertThat(DataSize.parse(bytes.toString()))
-            .isEqualTo(bytes);
+        assertThat(DataSize.parse(dataSize.toString()))
+            .isEqualTo(dataSize);
     }
 
     @Test
@@ -100,13 +100,13 @@ public class DataSizeTest implements WithAssertions {
     public void test_value_unit() {
         BigDecimal value = BigDecimal.ZERO;
         DataUnit unit = ByteUnit.BYTE;
-        DataSize bytes = DataSize.of(value, unit);
+        DataSize dataSize = DataSize.of(value, unit);
 
-        assertThat(bytes.getValue())
+        assertThat(dataSize.getValue())
             .isNotNull()
             .isEqualTo(value);
 
-        assertThat(bytes.getUnit())
+        assertThat(dataSize.getUnit())
             .isNotNull()
             .isEqualTo(unit);
     }
@@ -114,46 +114,46 @@ public class DataSizeTest implements WithAssertions {
     @Test
     @DisplayName("it should be able to pick the greater of two objects")
     public void test_max() {
-        DataSize bytes1 = DataSize.of(1024, ByteUnit.BYTE);
-        DataSize bytes2 = DataSize.of(1, ByteUnit.SI.KILOBYTE);
+        DataSize dataSize1 = DataSize.of(1024, ByteUnit.BYTE);
+        DataSize dataSize2 = DataSize.of(1, ByteUnit.SI.KILOBYTE);
 
-        DataSize max1 = DataSize.max(bytes1, bytes2);
-        DataSize max2 = DataSize.max(bytes2, bytes1);
+        DataSize max1 = DataSize.max(dataSize1, dataSize2);
+        DataSize max2 = DataSize.max(dataSize2, dataSize1);
 
         assertThat(max1)
             .isNotNull()
-            .isSameAs(bytes1);
+            .isSameAs(dataSize1);
 
         assertThat(max2)
             .isNotNull()
-            .isSameAs(bytes1);
+            .isSameAs(dataSize1);
     }
 
     @Test
     @DisplayName("it should be able to pick the lesser of two objects")
     public void test_min() {
-        DataSize bytes1 = DataSize.of(1024, ByteUnit.BYTE);
-        DataSize bytes2 = DataSize.of(1, ByteUnit.SI.KILOBYTE);
+        DataSize dataSize1 = DataSize.of(1024, ByteUnit.BYTE);
+        DataSize dataSize2 = DataSize.of(1, ByteUnit.SI.KILOBYTE);
 
-        DataSize min1 = DataSize.min(bytes1, bytes2);
-        DataSize min2 = DataSize.min(bytes2, bytes1);
+        DataSize min1 = DataSize.min(dataSize1, dataSize2);
+        DataSize min2 = DataSize.min(dataSize2, dataSize1);
 
         assertThat(min1)
             .isNotNull()
-            .isSameAs(bytes2);
+            .isSameAs(dataSize2);
 
         assertThat(min2)
             .isNotNull()
-            .isSameAs(bytes2);
+            .isSameAs(dataSize2);
     }
 
     @Test
     @DisplayName("it should have simple math functions such as add")
     public void test_add() {
-        DataSize bytes1 = DataSize.of(1024, ByteUnit.BYTE);
-        DataSize bytes2 = DataSize.of(1, ByteUnit.IEC.KIBIBYTE);
+        DataSize dataSize1 = DataSize.of(1024, ByteUnit.BYTE);
+        DataSize dataSize2 = DataSize.of(1, ByteUnit.IEC.KIBIBYTE);
 
-        DataSize sum = bytes1.add(bytes2);
+        DataSize sum = dataSize1.add(dataSize2);
 
         assertThat(sum)
             .isNotNull()
@@ -163,10 +163,10 @@ public class DataSizeTest implements WithAssertions {
     @Test
     @DisplayName("it should have simple math functions such as subtract")
     public void test_subtract() {
-        DataSize bytes1 = DataSize.of(1024, ByteUnit.BYTE);
-        DataSize bytes2 = DataSize.of(1, ByteUnit.SI.KILOBYTE);
+        DataSize dataSize1 = DataSize.of(1024, ByteUnit.BYTE);
+        DataSize dataSize2 = DataSize.of(1, ByteUnit.SI.KILOBYTE);
 
-        DataSize diff = bytes1.subtract(bytes2);
+        DataSize diff = dataSize1.subtract(dataSize2);
 
         assertThat(diff)
             .isNotNull()
@@ -176,11 +176,11 @@ public class DataSizeTest implements WithAssertions {
     @Test
     @DisplayName("it should never be less than zero")
     public void test_subtract_lessThanZero() {
-        DataSize bytes1 = DataSize.of(0, ByteUnit.BYTE);
-        DataSize bytes2 = DataSize.of(1, ByteUnit.BYTE);
+        DataSize dataSize1 = DataSize.of(0, ByteUnit.BYTE);
+        DataSize dataSize2 = DataSize.of(1, ByteUnit.BYTE);
 
-        DataSize diff1 = bytes1.subtract(bytes2);
-        DataSize diff2 = bytes1.decrement();
+        DataSize diff1 = dataSize1.subtract(dataSize2);
+        DataSize diff2 = dataSize1.decrement();
 
         assertThat(diff1)
             .isNotNull()
@@ -194,14 +194,13 @@ public class DataSizeTest implements WithAssertions {
         for (DataUnit unit : ALL_UNITS) {
             IntStream.range(0, 10)
                      .forEach(i -> {
-                         DataSize bytes = DataSize.of(i, unit)
-                                            .increment();
+                         DataSize dataSize = DataSize.of(i, unit).increment();
 
-                         assertThat(bytes.getValue())
+                         assertThat(dataSize.getValue())
                              .isNotNull()
                              .isEqualByComparingTo(BigDecimal.valueOf(i + 1));
 
-                         assertThat(bytes.getUnit())
+                         assertThat(dataSize.getUnit())
                              .isNotNull()
                              .isEqualTo(unit);
                      });
@@ -214,14 +213,13 @@ public class DataSizeTest implements WithAssertions {
         for (DataUnit unit : ALL_UNITS) {
             IntStream.range(0, 10)
                      .forEach(i -> {
-                         DataSize bytes = DataSize.of(i, unit)
-                                            .decrement();
+                         DataSize dataSize = DataSize.of(i, unit).decrement();
 
-                         assertThat(bytes.getValue())
+                         assertThat(dataSize.getValue())
                              .isNotNull()
                              .isEqualByComparingTo(BigDecimal.valueOf(Math.max(0, i - 1)));
 
-                         assertThat(bytes.getUnit())
+                         assertThat(dataSize.getUnit())
                              .isNotNull()
                              .isEqualTo(unit);
                      });
@@ -231,10 +229,10 @@ public class DataSizeTest implements WithAssertions {
     @Test
     @DisplayName("it should be convertable to other units")
     public void test_toUnit() {
-        DataSize bytes = DataSize.of(1, ByteUnit.BYTE);
+        DataSize dataSize = DataSize.of(1, ByteUnit.BYTE);
 
         for (DataUnit unit : ALL_UNITS) {
-            DataSize converted = bytes.toUnit(unit);
+            DataSize converted = dataSize.toUnit(unit);
 
             assertThat(converted.getUnit())
                 .isNotNull()
@@ -282,9 +280,9 @@ public class DataSizeTest implements WithAssertions {
     public void test_toString() {
         double value = 15.389203948;
         DataUnit unit = ByteUnit.SI.KILOBYTE;
-        DataSize bytes = DataSize.of(value, unit);
+        DataSize dataSize = DataSize.of(value, unit);
 
-        assertThat(bytes.toString())
+        assertThat(dataSize.toString())
             .isNotBlank()
             .isEqualTo(String.format("%.2f %s", value, unit));
     }
@@ -296,10 +294,10 @@ public class DataSizeTest implements WithAssertions {
         BigDecimal value = new BigDecimal("0.000000000000000000000000001");
         DataUnit unit = ByteUnit.JEDEC.MEGABYTE;
 
-        DataSize bytes1 = DataSize.of(value, unit);
+        DataSize dataSize1 = DataSize.of(value, unit);
         ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
         ObjectOutput objectOutput = new ObjectOutputStream(byteOutput);
-        objectOutput.writeObject(bytes1);
+        objectOutput.writeObject(dataSize1);
         objectOutput.close();
         byteOutput.close();
 
@@ -307,19 +305,19 @@ public class DataSizeTest implements WithAssertions {
 
         ByteArrayInputStream byteInput = new ByteArrayInputStream(data);
         ObjectInput objectInput = new ObjectInputStream(byteInput);
-        DataSize bytes2 = (DataSize) objectInput.readObject();
+        DataSize dataSize2 = (DataSize) objectInput.readObject();
         objectInput.close();
         byteInput.close();
 
-        assertThat(bytes2)
+        assertThat(dataSize2)
             .isNotNull()
-            .isEqualTo(bytes1);
+            .isEqualTo(dataSize1);
 
-        assertThat(bytes2.getValue())
+        assertThat(dataSize2.getValue())
             .isNotNull()
             .isEqualTo(value);
 
-        assertThat(bytes2.getUnit())
+        assertThat(dataSize2.getUnit())
             .isNotNull()
             .isEqualTo(unit);
     }

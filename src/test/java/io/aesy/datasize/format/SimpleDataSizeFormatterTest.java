@@ -36,8 +36,8 @@ public class SimpleDataSizeFormatterTest implements WithAssertions {
         DataSizeFormatter formatter = new SimpleDataSizeFormatter();
 
         for (DataUnit unit : ALL_UNITS) {
-            DataSize bytes = DataSize.of(Math.E, unit);
-            String result = formatter.format(bytes);
+            DataSize dataSize = DataSize.of(Math.E, unit);
+            String result = formatter.format(dataSize);
 
             assertThat(result)
                 .isNotBlank()
