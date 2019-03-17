@@ -10,7 +10,24 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * A {@code DataSizeConverter} converts {@code DataSize} objects to other {@code DataSize} objects.
+ * A {@code SmartNaturalDataSizeConverter} converts {@code DataSize} objects to other
+ * {@code DataSize} objects with more human readable units.
+ *
+ * <p>
+ * The resulting unit may be of any standard. The choice of unit is based on a combination of
+ * value range, value decimal points and original standard family (SI, IEC, JEDEC).
+ * Values between 1 and 1000 are preferred.
+ * </p>
+ *
+ * <blockquote>
+ * Example usage:
+ * <pre>{@code
+ * DataSize dataSize = DataSize.of(1024, ByteUnits.BYTE);
+ * String converted = new SimpleNaturalDataSizeConverter().convert(dataSize);
+ *
+ * assertEquals(converted.getUnit(), ByteUnit.SI.KILOBYTE");
+ * }</pre>
+ * </blockquote>
  */
 public class SmartNaturalDataSizeConverter implements DataSizeConverter {
     private static final BigDecimal EIGHT;
@@ -28,7 +45,18 @@ public class SmartNaturalDataSizeConverter implements DataSizeConverter {
     }
 
     /**
+    * Creates a {@code SmartNaturalDataSizeConverter}.
+    */
+    public SmartNaturalDataSizeConverter() {}
+
+    /**
      * Converts a {@code DataSize} object to another {@code DataSize} object.
+     *
+     * <p>
+     * The resulting unit may be of any standard. The choice of unit is based on a combination of
+     * value range, value decimal points and original standard family (SI, IEC, JEDEC).
+     * Values between 1 and 1000 are preferred.
+     * </p>
      *
      * @param dataSize The DataSize to convert
      * @return The converted {@code DataSize} object

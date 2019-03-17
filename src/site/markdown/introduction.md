@@ -7,4 +7,4 @@ A small utility library for working with units of digital information, featuring
 * Parsing
 * Formatting
 
-Built for Java 8+ with an easy to use API.
+Built for Java 8+ with a easy to use API.

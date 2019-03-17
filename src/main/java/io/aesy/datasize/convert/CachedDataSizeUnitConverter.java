@@ -8,15 +8,44 @@ import java.math.MathContext;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A {@code CachedDataSizeUnitConverter} converts {@code DataSize} objects to other units.
+ *
+ * <p>
+ * It globally caches and reuses the ratio between unit conversions for faster conversions.
+ * </p>
+ *
+ * <blockquote>
+ * Example usage:
+ * <pre>{@code
+ * DataSize dataSize = DataSize.of(Math.PI, ByteUnits.SI.KILOBYTE);
+ * DataSize converted = new CachedDataSizeUnitConverter(ByteUnit.SI.MEGABYTE).convert(dataSize);
+ *
+ * assertEquals(converted.getUnit(), ByteUnit.SI.MEGABYTE);
+ * }</pre>
+ * </blockquote>
+ */
 public class CachedDataSizeUnitConverter implements DataSizeConverter {
     private static final Map<Conversion, BigDecimal> cache = new HashMap<>();
 
     private final DataUnit toUnit;
 
+    /**
+     * Creates a {@code CachedDataSizeUnitConverter}.
+     *
+     * @param unit The unit to convert to
+     */
     public CachedDataSizeUnitConverter(DataUnit unit) {
         this.toUnit = unit;
     }
 
+    /**
+     * Converts a {@code DataSize} object to another unit.
+     *
+     * @param dataSize The {@code DataSize} object whose unit to convert
+     * @return The converted {@code DataSize} object
+     * @throws IllegalArgumentException If the given {@code DataSize} object is null
+     */
     @Override
     public DataSize convert(DataSize dataSize) {
         BigDecimal value = dataSize.getValue();

@@ -126,34 +126,10 @@ public final class DataSize implements Comparable<DataSize>, Serializable {
     }
 
     /**
-     * Formats a {@code DataSize} object based on a format description to produce a nicely formatted
-     * string. The formatted output produced by this is of the form {@literal "#.## <unit>"}, where
-     * {@literal "<unit>"} is the abbreviation of the unit associated with this instance.
-     *
-     * <p>
-     * The way the number is formatted is based on
-     * {@code Locale.getDefault(Locale.Category.FORMAT)}.
-     * </p>
-     *
-     * @param datasize The DataSize to format
-     * @return The formatted {@code DataSize} string
-     * @throws IllegalArgumentException If the {@code DataSize} object is null
-     */
-    public static String format(DataSize datasize, String format) {
-        // Create new instance every time in case default locale has changed between calls
-        DataSizeFormatter formatter = new SimpleDataSizeFormatter();
-
-        // TODO honor format
-        // TODO write test
-
-        return formatter.format(datasize);
-    }
-
-    /**
      * Parses an input string to produce a {@code DataSize} object.
      *
      * <p>
-     * The method expects a string od the form {@literal "2.42 kB"} or {@literal "2.42 kilobyte"}.
+     * The method expects a string of the form {@literal "2.42 kB"} or {@literal "2.42 kilobyte"}.
      * Unit names in plural are accepted.
      * </p>
      *
@@ -317,8 +293,8 @@ public final class DataSize implements Comparable<DataSize>, Serializable {
      *
      * <p>
      * The resulting unit will be of the same standard, such as SI, JEDEC or IEC as this object,
-     * unless this objects' unit is {@code ByteUnit.BYTE} by which the resulting unit may be
-     * of any available {@code ByteUnit} type.
+     * unless this objects' unit is {@code ByteUnit.BYTE} or {@code BitUnit.BIT} by which the
+     * resulting unit may be of any available {@code DataUnit} type.
      * </p>
      *
      * @return A new {@code DataSize} object that is equal to this.

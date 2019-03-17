@@ -10,7 +10,24 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * A {@code DataSizeConverter} converts {@code DataSize} objects to other {@code DataSize} objects.
+ * A {@code SimpleNaturalDataSizeConverter} converts {@code DataSize} objects to other
+ * {@code DataSize} objects with more human readable units.
+ *
+ * <p>
+ * The resulting unit will be of the same standard, such as SI, JEDEC or IEC as this object,
+ * unless this objects' unit is {@code ByteUnit.BYTE} or {@code BitUnit.BIT} by which the
+ * resulting unit may be of any available {@code DataUnit} type.
+ * </p>
+ *
+ * <blockquote>
+ * Example usage:
+ * <pre>{@code
+ * DataSize dataSize = DataSize.of(1024, ByteUnits.BYTE);
+ * String converted = new SimpleNaturalDataSizeConverter().convert(dataSize);
+ *
+ * assertEquals(converted.getUnit(), ByteUnit.SI.KILOBYTE");
+ * }</pre>
+ * </blockquote>
  */
 public class SimpleNaturalDataSizeConverter implements DataSizeConverter {
     private static final BigDecimal EIGHT;
@@ -28,7 +45,18 @@ public class SimpleNaturalDataSizeConverter implements DataSizeConverter {
     }
 
     /**
+    * Creates a {@code SimpleNaturalDataSizeConverter}.
+    */
+    public SimpleNaturalDataSizeConverter() {}
+
+    /**
      * Converts a {@code DataSize} object to another {@code DataSize} object.
+     *
+     *  <p>
+     *  The resulting unit will be of the same standard, such as SI, JEDEC or IEC as this object,
+     *  unless this objects' unit is {@code ByteUnit.BYTE} or {@code BitUnit.BIT} by which the
+     *  resulting unit may be of any available {@code ByteUnit} type.
+     *  </p>
      *
      * @param dataSize The DataSize to convert
      * @return The converted {@code DataSize} object

@@ -24,7 +24,7 @@ A small utility library for working with units of digital information, featuring
 * Parsing
 * Formatting
 
-Built for Java 8+ with an easy to use API.
+Built for Java 8+.
 
 ### [API Reference](https://aesy.github.io/DataSize/apidocs/)
 
@@ -45,12 +45,13 @@ It features simple & convenient methods for conversion, formatting and parsing:
 DataSize withNaturalUnit = DataSize.of(1024, ByteUnit.BYTE).toNaturalUnit(); 
 assertEquals(withNaturalUnit.getUnit(), ByteUnit.IEC.KIBIBYTE);
 
-DataSize bytes = DataSize.of(1024, ByteUnit.BYTE).toUnit(ByteUnit.SI.KILOBYTE);
-assertEquals(bytes.getValue(), BigDecimal.valueOf(1.024));
+DataSize dataSize = DataSize.of(1024, ByteUnit.BYTE).toUnit(ByteUnit.SI.KILOBYTE);
+assertEquals(dataSize.getValue(), BigDecimal.valueOf(1.024));
 
 // Formatting
-String formatted = DataSize.format(withNaturalUnit, "#.##"); 
-assertEquals(formatted, "1.00 KiB");
+DataSize dataSize = DataSize.of(1000, ByteUnit.BYTE); 
+String formatted = dataSize.toString(); 
+assertEquals(formatted, "1 kB");
 
 // Parsing
 DataSize oneByte = DataSize.parse("1 B"); 
