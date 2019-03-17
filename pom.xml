@@ -6,11 +6,11 @@
 
     <groupId>io.aesy</groupId>
     <artifactId>datasize</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>DataSize</name>
-    <description>A utility library for working with information units</description>
+    <description>A utility library for working with units of digital information</description>
     <inceptionYear>2018</inceptionYear>
     <url>https://github.com/aesy/datasize</url>
 
@@ -31,7 +31,7 @@
         <url>https://github.com/aesy/datasize</url>
         <connection>scm:git:git://github.com/aesy/datasize.git</connection>
         <developerConnection>scm:git:git@github.com:aesy/datasize.git</developerConnection>
-        <tag>master</tag>
+        <tag>v1.0.0</tag>
     </scm>
 
     <developers>
@@ -49,18 +49,49 @@
         </contributor>
     </contributors>
 
+    <distributionManagement>
+        <snapshotRepository>
+            <id>sonatype-nexus-repository</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+
+        <repository>
+            <id>sonatype-nexus-repository</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+    </distributionManagement>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
+    <profiles>
+        <profile>
+            <id>release</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <reporting>
         <plugins>
@@ -144,6 +175,19 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.8</version>
+                <extensions>true</extensions>
+
+                <configuration>
+                    <serverId>sonatype-nexus-repository</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
