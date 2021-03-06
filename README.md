@@ -1,3 +1,5 @@
+<img align="left" width="80" height="80" src="./img/icon.svg">
+
 # DataSize
 
 [![maven-central][maven-central-image]][maven-central-url]
