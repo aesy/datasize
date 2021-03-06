@@ -35,7 +35,12 @@ import java.util.Locale;
         int start = context.getPosition();
 
         ParsePosition position = new ParsePosition(start);
-        BigDecimal result = (BigDecimal) decimalParser.parse(buffer, position);
+        Number result = decimalParser.parse(buffer, position);
+
+        if (result instanceof Double) {
+            result = BigDecimal.valueOf((Double) result);
+        }
+
         int errorIndex = position.getErrorIndex();
 
         if (errorIndex > -1) {

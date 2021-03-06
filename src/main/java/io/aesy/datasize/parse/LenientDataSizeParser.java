@@ -45,7 +45,6 @@ import java.util.Locale;
  * </blockquote>
  */
 public class LenientDataSizeParser implements DataSizeParser {
-    // private static final List<ByteUnit> units = ByteUnit.ALL.units();
     private static final List<DataUnit> units;
 
     static {
