@@ -38,7 +38,7 @@ jobs:
     - name: Lint with Checkstyle
       run: mvn checkstyle:check
     - name: Test with Maven
-      run: mvn test jacoco:report
+      run: mvn test jacoco:report -Dse.eris.notnull.instrument=false
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1.2.1
       with:

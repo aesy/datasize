@@ -9,6 +9,7 @@ import io.aesy.datasize.provider.DataSizeParserFactoryProvider;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
@@ -38,6 +39,7 @@ public class GenericDataSizeParserTest implements WithAssertions {
     @ParameterizedTest
     @ArgumentsSource(DataSizeParserFactoryProvider.class)
     @DisplayName("it should throw IllegalArgumentException if passed null values")
+    @DisabledIfSystemProperty(named = "se.eris.notnull.instrument", matches = "false")
     public void test_npe(DataSizeParserFactory parserFactory) {
         assertThatThrownBy(() -> parserFactory.create(null))
             .isInstanceOf(IllegalArgumentException.class);

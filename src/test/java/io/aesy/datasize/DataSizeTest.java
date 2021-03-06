@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -31,6 +32,7 @@ public class DataSizeTest implements WithAssertions {
 
     @Test
     @DisplayName("it should throw IllegalArgumentException if passed null values")
+    @DisabledIfSystemProperty(named = "se.eris.notnull.instrument", matches = "false")
     public void test_npe() {
         assertThatThrownBy(() -> DataSize.of((BigInteger) null, ByteUnit.BYTE))
             .isInstanceOf(IllegalArgumentException.class);
