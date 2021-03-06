@@ -16,4 +16,4 @@ indent_size = 4
 
 [*.{xml,yml,json}]
 indent_style = space
-indent_size = 4
+indent_size = 2

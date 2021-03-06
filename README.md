@@ -1,20 +1,20 @@
 # DataSize
 
 [![maven-central][maven-central-image]][maven-central-url]
-[![Build Status][travis-image]][travis-url]
-[![Coverage Status][coveralls-image]][coveralls-url]
+[![Build Status][github-actions-image]][github-actions-url]
+[![Coverage Status][codecov-image]][codecov-url]
 [![MIT license][license-image]][license-url]
 
-[maven-central-image]: https://img.shields.io/maven-central/v/io.aesy/datasize.svg
+[maven-central-image]: https://img.shields.io/maven-central/v/io.aesy/datasize?style=flat-square
 [maven-central-url]: https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.aesy%22%20datasize
 
-[travis-image]: https://img.shields.io/travis/aesy/datasize.svg
-[travis-url]: https://travis-ci.org/aesy/datasize
+[github-actions-image]: https://img.shields.io/github/workflow/status/aesy/datasize/Continous%20Integration?style=flat-square
+[github-actions-url]: https://github.com/aesy/datasize/actions
 
-[coveralls-image]: https://coveralls.io/repos/github/aesy/datasize/badge.svg?branch=master
-[coveralls-url]: https://coveralls.io/github/aesy/datasize?branch=master
+[codecov-image]: https://img.shields.io/codecov/c/github/aesy/datasize?style=flat-square
+[codecov-url]: https://codecov.io/github/aesy/datasize
 
-[license-image]: https://img.shields.io/github/license/aesy/datasize.svg
+[license-image]: https://img.shields.io/github/license/aesy/datasize?style=flat-square
 [license-url]: https://github.com/aesy/datasize/blob/master/LICENSE
 
 A small utility library for working with units of digital information, featuring:
