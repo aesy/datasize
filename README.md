@@ -10,7 +10,7 @@
 [maven-central-image]: https://img.shields.io/maven-central/v/io.aesy/datasize?style=flat-square
 [maven-central-url]: https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.aesy%22%20datasize
 
-[github-actions-image]: https://img.shields.io/github/workflow/status/aesy/datasize/Continous%20Integration?style=flat-square
+[github-actions-image]: https://img.shields.io/github/actions/workflow/status/aesy/datasize/ci.yml?branch=master&style=flat-square
 [github-actions-url]: https://github.com/aesy/datasize/actions
 
 [codecov-image]: https://img.shields.io/codecov/c/github/aesy/datasize?style=flat-square
